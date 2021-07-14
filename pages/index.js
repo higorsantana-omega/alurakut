@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import React from 'react'
 import { MainGrid } from '../src/components/MainGrid'
 import { Box } from '../src/components/Box'
 import { AlurakutMenu, AlurakutProfileSidebarMenuDefault, OrkutNostalgicIconSet } from '../src/lib/AlurakutCommons'
@@ -6,7 +6,7 @@ import { ProfileRelationsBoxWrapper } from '../src/components/ProfileRelations'
 
 function ProfileSidebar(props) {
   return (
-    <Box>
+    <Box as="aside">
       <img src={`https://github.com/${props.githubUser}.png`} style={{ borderRadius: '8px' }} />
       <hr />
       <p>
@@ -22,11 +22,17 @@ function ProfileSidebar(props) {
 
 export default function Home() {
   const githubUser = 'omariosouto'
+  const [comunidades, setComunidades] = React.useState([{
+    id: '21211',
+    title: "Eu odeio acordar cedo",
+    image: "https://alurakut.vercel.app/capa-comunidade-01.jpg"
+  }])
+  // const comunidades = []
   const pessoasFavoritas = ["juunegreiros", "peas", "marcobrunodev", "felipefialho"]
 
   return (
     <>
-      <AlurakutMenu />
+      <AlurakutMenu githubUser={githubUser} />
       <MainGrid>
         <div className="profileArea" style={{ gridArea: 'profileArea'}}>
           <ProfileSidebar githubUser={ githubUser } />
@@ -41,28 +47,70 @@ export default function Home() {
             <OrkutNostalgicIconSet />
           </Box>
           <Box>
-            <h2>O que você deseja fazer?</h2>
-            <form>
-              
-              <input
-                placeholder="Qual vai ser o nome da sua comunidade?"
-                name="title"
-                aria-label="Qual vai ser o nome da sua comunidade?" />
+            <h2 className="subTitle">O que você deseja fazer?</h2>
+            <form onSubmit={function handleCreateCommunity(e) {
+              e.preventDefault()
+              const dadosForm = new FormData(e.target)
+              const comunidade = {
+                id: new Date().toISOString(),
+                title: dadosForm.get('title'),
+                image: dadosForm.get('image')
+              }
+              // comunidades.push('Alura Stars')
+              setComunidades([...comunidades, comunidade])
+
+
+            }}>
+              <div>
+                <input
+                  placeholder="Qual vai ser o nome da sua comunidade?"
+                  name="title"
+                  aria-label="Qual vai ser o nome da sua comunidade?"
+                type="text"/>
+              </div>
+              <div>
+                <input
+                  placeholder="Coloque uma URL para usarmos de capa"
+                  name="image"
+                  aria-label="Coloque uma URL para usarmos de capa" />
+              </div>
+
+              <button>
+                Criar comunidade
+              </button>
             </form>
           </Box>
         </div>
 
-        <div className="profileRelationsArea" style={{ gridArea: 'profileRelationsArea'}}>
+        <div className="profileRelationsArea" style={{ gridArea: 'profileRelationsArea' }}>
           <ProfileRelationsBoxWrapper>
             <h2 className="smallTitle">
-              Pessoas da comunidade ({pessoasFavoritas.lenght})
+              Comunidades ({comunidades.length})
+            </h2>
+            <ul>
+              {comunidades.map(item => {
+                return (
+                  <li id={item.id} >
+                    <a href={`/users/${item.title}`} >
+                    <img src={item.image} />
+                    <span>{item.title}</span>
+                    </a>
+                  </li>
+                )
+              })}
+            </ul>
+          </ProfileRelationsBoxWrapper>
+          <ProfileRelationsBoxWrapper>
+
+            <h2 className="smallTitle">
+              Pessoas da comunidade ({pessoasFavoritas.length})
             </h2>
               
             <ul>
               {pessoasFavoritas.map(item => {
                 return (
-                  <li>
-                    <a href={`/users/${item}`} key={item} >
+                  <li key={item}>
+                    <a href={`/users/${item}`} >
                     <img src={`https://github.com/${item}.png`} />
                     <span>{item}</span>
                     </a>
