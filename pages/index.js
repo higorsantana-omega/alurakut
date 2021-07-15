@@ -20,6 +20,28 @@ function ProfileSidebar(props) {
   )
 }
 
+function ProfileRelationsBox(props) {
+  return (
+    <ProfileRelationsBoxWrapper>
+      <h2 className="smallTitle">
+        {props.title} ({props.items.length})
+      </h2>
+      <ul>
+        {/* {comunidades.map(item => {
+          return (
+            <li id={item.id} >
+              <a href={`/users/${item.title}`} >
+              <img src={item.image} />
+              <span>{item.title}</span>
+              </a>
+            </li>
+          )
+        })} */}
+      </ul>
+      </ProfileRelationsBoxWrapper>
+  )
+}
+
 export default function Home() {
   const githubUser = 'omariosouto'
   const [comunidades, setComunidades] = React.useState([{
@@ -30,15 +52,27 @@ export default function Home() {
   // const comunidades = []
   const pessoasFavoritas = ["juunegreiros", "peas", "marcobrunodev", "felipefialho"]
 
+  const [seguidores, setSeguidores] = React.useState([])
+
+  React.useEffect(() => {
+    fetch('https://api.github.com/users/roger-melo/followers')
+      .then(res => {
+        return res.json()
+      })
+      .then(resComplete => {
+        setSeguidores(resComplete)
+      })
+  }, [])
+
   return (
     <>
       <AlurakutMenu githubUser={githubUser} />
       <MainGrid>
-        <div className="profileArea" style={{ gridArea: 'profileArea'}}>
-          <ProfileSidebar githubUser={ githubUser } />
+        <div className="profileArea" style={{ gridArea: 'profileArea' }}>
+          <ProfileSidebar githubUser={githubUser} />
         </div>
-        
-        <div className="welcomeArea" style={{ gridArea: 'welcomeArea'}}>
+
+        <div className="welcomeArea" style={{ gridArea: 'welcomeArea' }}>
           <Box>
             <h1 className="title">
               Bem vindo(a)
@@ -66,7 +100,7 @@ export default function Home() {
                   placeholder="Qual vai ser o nome da sua comunidade?"
                   name="title"
                   aria-label="Qual vai ser o nome da sua comunidade?"
-                type="text"/>
+                  type="text" />
               </div>
               <div>
                 <input
@@ -83,6 +117,7 @@ export default function Home() {
         </div>
 
         <div className="profileRelationsArea" style={{ gridArea: 'profileRelationsArea' }}>
+          <ProfileRelationsBox title="Seguidores" items={seguidores} />
           <ProfileRelationsBoxWrapper>
             <h2 className="smallTitle">
               Comunidades ({comunidades.length})
@@ -92,8 +127,8 @@ export default function Home() {
                 return (
                   <li id={item.id} >
                     <a href={`/users/${item.title}`} >
-                    <img src={item.image} />
-                    <span>{item.title}</span>
+                      <img src={item.image} />
+                      <span>{item.title}</span>
                     </a>
                   </li>
                 )
@@ -105,14 +140,14 @@ export default function Home() {
             <h2 className="smallTitle">
               Pessoas da comunidade ({pessoasFavoritas.length})
             </h2>
-              
+
             <ul>
               {pessoasFavoritas.map(item => {
                 return (
                   <li key={item}>
                     <a href={`/users/${item}`} >
-                    <img src={`https://github.com/${item}.png`} />
-                    <span>{item}</span>
+                      <img src={`https://github.com/${item}.png`} />
+                      <span>{item}</span>
                     </a>
                   </li>
                 )
@@ -120,7 +155,7 @@ export default function Home() {
             </ul>
           </ProfileRelationsBoxWrapper>
         </div>
-        </MainGrid>
-      </>
+      </MainGrid>
+    </>
   )
 }
