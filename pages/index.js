@@ -44,11 +44,7 @@ function ProfileRelationsBox(props) {
 
 export default function Home() {
   const githubUser = 'omariosouto'
-  const [comunidades, setComunidades] = React.useState([{
-    id: '21211',
-    title: "Eu odeio acordar cedo",
-    image: "https://alurakut.vercel.app/capa-comunidade-01.jpg"
-  }])
+  const [comunidades, setComunidades] = React.useState([])
   // const comunidades = []
   const pessoasFavoritas = ["juunegreiros", "peas", "marcobrunodev", "felipefialho"]
 
@@ -63,7 +59,7 @@ export default function Home() {
         setSeguidores(resComplete)
       })
 
-    fetch('', {
+    fetch('https://graphql.datocms.com/', {
       method: 'POST',
       headers: {
         'Authorization': '77e6c4dca2306b08db892563638887',
@@ -122,7 +118,10 @@ export default function Home() {
               })
                 .then(async res => {
                   const dados = await res.json()
+                  console.log(dados)
                   const comunidade = dados.record
+                  console.log(comunidade)
+
                   setComunidades([...comunidades, comunidade]) 
                 })
               // comunidades.push('Alura Stars')
