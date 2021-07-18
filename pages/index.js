@@ -62,6 +62,28 @@ export default function Home() {
       .then(resComplete => {
         setSeguidores(resComplete)
       })
+
+    fetch('', {
+      method: 'POST',
+      headers: {
+        'Authorization': '77e6c4dca2306b08db892563638887',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({ "query": `query {
+        allCommunities {
+          id
+          title
+          imageUrl
+          creatorSlug
+        }
+      }` })
+    })
+      .then(res => res.json())
+      .then(resC => {
+        const comunidadesCMS = resC.data.allCommunities
+        setComunidades(comunidadesCMS)
+    })
   }, [])
 
   return (
@@ -126,8 +148,8 @@ export default function Home() {
               {comunidades.map(item => {
                 return (
                   <li id={item.id} >
-                    <a href={`/users/${item.title}`} >
-                      <img src={item.image} />
+                    <a href={`/comunidades/${item.id}`} >
+                      <img src={item.imageUrl} />
                       <span>{item.title}</span>
                     </a>
                   </li>
