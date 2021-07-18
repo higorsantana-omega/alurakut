@@ -43,7 +43,6 @@ function ProfileRelationsBox(props) {
 }
 
 export default function Home() {
-  // Githubuser 
   const githubUser = 'omariosouto'
   const [comunidades, setComunidades] = React.useState([{
     id: '21211',
