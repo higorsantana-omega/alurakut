@@ -7,9 +7,10 @@ export default async function recebeRequests(req, res) {
 
         const record = await client.items.create({
             itemType: "973327",
-            title: "Teste",
-            imageUrl: "https://github.com/omariosouto.png",
-            creatorSlug: 'omario'
+            ...req.body
+            // title: "Teste",
+            // imageUrl: "https://github.com/omariosouto.png",
+            // creatorSlug: 'omario'
         })
 
         res.json({
