@@ -108,12 +108,24 @@ export default function Home() {
               e.preventDefault()
               const dadosForm = new FormData(e.target)
               const comunidade = {
-                id: new Date().toISOString(),
                 title: dadosForm.get('title'),
-                image: dadosForm.get('image')
+                imageUrl: dadosForm.get('image'),
+                creatorSlug: githubUser
               }
+
+              fetch('/api/comunidades', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(comunidade)
+              })
+                .then(async res => {
+                  const dados = await res.json()
+                  const comunidade = dados.record
+                  setComunidades([...comunidades, comunidade]) 
+                })
               // comunidades.push('Alura Stars')
-              setComunidades([...comunidades, comunidade])
 
 
             }}>
